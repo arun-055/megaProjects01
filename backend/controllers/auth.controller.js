@@ -41,7 +41,12 @@ export const signup = async (req, res) => {
     await storeRefreshToken(user._id,refreshToken);
     setCookies(res,accessToken,refreshToken);
 
-    res.status(201).json({ user, message: "user created successfully" });
+    res.status(201).json({ user:{
+      _id:user._id,
+      name:user.name,
+      email:user.email,
+      role:user.role,
+    }, message: "user created successfully" });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
