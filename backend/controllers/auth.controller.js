@@ -1,5 +1,6 @@
 import User from "../models/user.model.js";
 import jwt from "jsonwebtoken";
+import {client} from "../lib/redis.js"
 
 const generateTokens = (userId) => {
   const accessToken = jwt.sign({ userId }, process.env.ACCESS_TOKEN_SECRET, {
@@ -11,11 +12,11 @@ const generateTokens = (userId) => {
   return { accessToken, refreshToken };
 };
 const storeRefreshToken = async(userId, refreshToken) =>{
-  await Redis.set(`refresh_token:${userId}`,refreshToken,"EX", 7*24*60*60);//7 days
+  await client.set(`refresh_token:${userId}`,refreshToken,"EX", 7*24*60*60);//7 days
 }
 const setCookies= (res,accessToken,refreshToken)=>{
   res.cookie("accessToken", accessToken,{
-    httpOnly:true, // prevent XSS attacks, cross site scripting attack
+    httpOnly:true, // prvent XSS attacks, cross site scripting attack
     secure:process.env.NODE_env === "production",
     sameSite: "strict",//prevents CSRF attack, cross site scripting attack
     maxAge:15*60*1000,//15 minutes
@@ -24,7 +25,7 @@ const setCookies= (res,accessToken,refreshToken)=>{
     httpOnly:true, // prevent XSS attacks, cross site scripting attack
     secure:process.env.NODE_env === "production",
     sameSite: "strict",//prevents CSRF attack, cross site scripting attack
-    maxAge:15*60*1000,//15 minutes
+    maxAge: 7 * 24 * 60 * 60 * 1000,//15 minutes
   })
 }
 
@@ -57,5 +58,19 @@ export const login = async (req, res) => {
 };
 
 export const logout = async (req, res) => {
-  res.send("sign out route called");
+
+  try{
+    const refreshToken=req.cookies.refreshToken;
+
+    if(refreshToken){
+      const decoded = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET);
+      await Redis.del(`refresh_token:${decoded.userId}`);
+    }
+    res.clearCookie("accessToken");
+    res.clearCookie("refreshToken");
+    res.json({message:"Logged out successfully"});
+  }
+ catch(error){
+  res.status(500).json({message: "sever error,error: error.message"});
+ }
 };
