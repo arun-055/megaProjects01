@@ -1,6 +1,7 @@
 import User from "../models/user.model.js";
 import jwt from "jsonwebtoken";
-import {client} from "../lib/redis.js"
+import {redis} from "../lib/redis.js"
+import { Redis } from "ioredis";
 
 const generateTokens = (userId) => {
   const accessToken = jwt.sign({ userId }, process.env.ACCESS_TOKEN_SECRET, {
@@ -12,7 +13,7 @@ const generateTokens = (userId) => {
   return { accessToken, refreshToken };
 };
 const storeRefreshToken = async(userId, refreshToken) =>{
-  await client.set(`refresh_token:${userId}`,refreshToken,"EX", 7*24*60*60);//7 days
+  await redis.set(`refresh_token:${userId}`,refreshToken,"EX", 7*24*60*60);//7 days
 }
 const setCookies= (res,accessToken,refreshToken)=>{
   res.cookie("accessToken", accessToken,{
@@ -64,13 +65,13 @@ export const logout = async (req, res) => {
 
     if(refreshToken){
       const decoded = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET);
-      await Redis.del(`refresh_token:${decoded.userId}`);
+      await redis.del(`refresh_token:${decoded.userId}`);
     }
     res.clearCookie("accessToken");
     res.clearCookie("refreshToken");
     res.json({message:"Logged out successfully"});
   }
  catch(error){
-  res.status(500).json({message: "sever error,error: error.message"});
+  res.status(500).json({message: "server error error: error.message"});
  }
 };
