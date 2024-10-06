@@ -5,6 +5,7 @@ import authRoutes from "./routes/auth.route.js"
 
 import {connectDB} from "./lib/db.js";
 import cookieParser from "cookie-parser";
+import cartRoutes from "./routes/cart.route.js";
 
 dotenv.config();
 

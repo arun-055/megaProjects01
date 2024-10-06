@@ -1,3 +1,4 @@
+import Product from "../models/product.model";
 export const addTocart =async (req,res) =>{
 
     try {
@@ -43,14 +44,15 @@ export const updateQuantity = async(req,res)=> {
         const existingItem = user.cartitems.find((item)=> item.id === productId);
 
         if(existingItem) {
-            user.cartItems = user.cartItems.filter((item)=> item.id!== productId);
+            if(quantity === 0) {
+                  user.cartItems = user.cartItems.filter((item)=> item.id!== productId);
             await user.save();
             return res.json(user.cartitems);
-        }
+            }
         existingItem.quantity= quantity;
         await user.save;
-        return res.json(user.cartItems);
-    
+        return res.json(user.cartItems) ;
+        }
         else{
             res.status(404).json({message: " Product not found"});
         }
@@ -62,4 +64,19 @@ export const updateQuantity = async(req,res)=> {
 
 
 
+}
+export const getCartProducts = async(req,res)=>{
+    try{
+        const products = await Product.find({_id: {$in: req.user.cartItems}});
+        // add quantity for each product
+        const cartItems = products.map((product)=>{
+            const item = req.user.cartItems.find((cartItem)= cartItem.id === product.id);
+            return {...product.toJSON(), quantity: item.quantity};
+
+        });
+        res.json(cartItems);
+    }catch(error){
+        console.log("Error in getCartProducts controller", error.message);
+        res.status(500).json({message: "server error",error.message});
+    }
 }
