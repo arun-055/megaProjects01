@@ -36,4 +36,3 @@ export const validateCoupon = async(req,res)=> {
         
         }
     }
-}
