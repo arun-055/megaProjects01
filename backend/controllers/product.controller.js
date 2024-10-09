@@ -1,7 +1,8 @@
-import { MongoTopologyClosedError } from "mongodb";
+import mongoose from "mongoose";
 import cloudinary from "../lib/cloudinary.js";
 import Product from "../models/product.model.js";
 import User from "../models/user.model.js";
+import { nodeKeyToRedisOptions } from "ioredis/built/cluster/util.js";
 export const getAllProducts = async (req, res) => {
   try {
     const products = await Product.find({});
@@ -29,6 +30,7 @@ export const getFeaturedProducts = async (req, res) => {
       JSON.stringify(featuredProducts)
     );
     res.json(featuredProducts);
+    
   } catch (error) {
     console.log("Error in getFeatured products controller", error.message);
     res.status(500).json({ message: "Server error", error: error.message });
