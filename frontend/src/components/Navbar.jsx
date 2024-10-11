@@ -19,7 +19,7 @@ const Navbar = () => {
     </Link>
 
     <nav className="flex flex-wrap items-center gap-4">
-      <Link to={"/"} className='text-gray-300 hover:text-emarald-400 transition duration-300 ease-in-out'>
+      <Link to={"/"} className='text-gray-300 hover:text-emarald-400 transition duration-300 ease-in-out '>
       Home
       </Link>
       
@@ -52,12 +52,12 @@ const Navbar = () => {
      
 
     <Link to={"/signup"}
-    className="bg-emarald-600 hover:bg-emerald-700 text-white py-2 px-4 rounded-md flex items-center transitionduration-300 ease-in-out">
+    className="bg-emarald-600 bg-emerald-700 hover:bg-gray-500 text-white py-2 px-4 rounded-md flex items-center transitionduration-300 ease-in-out">
       <UserPlus className='mr-2' size={18}/>
       Sign Up
     </Link>
     <Link to={"/login"}
-    className="bg-emarald-600 hover:bg-emerald-700 text-white py-2 px-4 rounded-md flex items-center transitionduration-300 ease-in-out">
+    className="bg-emarald-600 bg-emerald-700 hover:bg-gray-500 text-white py-2 px-4 rounded-md flex items-center transitionduration-300 ease-in-out">
       <LogIn className='mr-2' size={18}/>
       Login
     </Link>

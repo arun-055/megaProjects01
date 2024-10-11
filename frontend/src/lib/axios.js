@@ -3,4 +3,4 @@ import axios from "axios";
     baseURL:import.meta.mode === "development" ? "http://localhost:5000/api":"/api",
     withCredentials:true,
 })
-export default axiosInstance;
+export default axiosInstance; 
