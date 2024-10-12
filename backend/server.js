@@ -1,5 +1,6 @@
 import express from "express";
 import dotenv from "dotenv";
+import cors from 'cors';
 
 import authRoutes from "./routes/auth.route.js"
 
@@ -20,6 +21,12 @@ const app = express();
 const PORT = process.env.PORT || 5001;
 
 app.use(express.json());
+app.use(cors({
+  origin: 'http://localhost:5173', // Allow your frontend origin
+  credentials: true, // Allow cookies to be sent/received
+  methods: ['GET', 'POST', 'PUT', 'DELETE'], // Allowed methods
+  allowedHeaders: ['Content-Type', 'Authorization'], // Allow these headers
+}));
 app.use(express.json({limit: "10mb"}));
 app.use(cookieParser());
 

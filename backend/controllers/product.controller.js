@@ -3,6 +3,7 @@ import cloudinary from "../lib/cloudinary.js";
 import Product from "../models/product.model.js";
 import User from "../models/user.model.js";
 import { nodeKeyToRedisOptions } from "ioredis/built/cluster/util.js";
+import Redis from "ioredis";
 export const getAllProducts = async (req, res) => {
   try {
     const products = await Product.find({});
@@ -14,7 +15,7 @@ export const getAllProducts = async (req, res) => {
 };
 export const getFeaturedProducts = async (req, res) => {
   try {
-    let featuredProducts = await Redis.get("featured_products");
+    let featuredProducts = await redis.get("featured_products");
     if (featuredProducts) {
       return res.json(JSON.parse(featuredProducts));
     }

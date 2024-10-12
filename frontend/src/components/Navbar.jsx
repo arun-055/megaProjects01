@@ -4,7 +4,7 @@ import React from 'react'
 import { useUserStore } from "../stores/useUserStore";
 
 const Navbar = () => {
-  const {user,LogOut} = useUserStore();
+  const {user,Logout} = useUserStore();
   const isAdmin = user?.role === "admin";
   
 
@@ -43,7 +43,7 @@ const Navbar = () => {
     )
     }
     {user? (
-      <button className="bg-gray-600 text-white py-2 px-4 rounded-md flex items-enter transition duration-300 ease-in-out" onClick={LogOut}>
+      <button className="bg-gray-600 text-white py-2 px-4 rounded-md flex items-enter transition duration-300 ease-in-out" onClick={Logout}>
         <LogOut size={18}/>
         <span className="hidden sm:inline ml-2">log Out</span>
       </button>
