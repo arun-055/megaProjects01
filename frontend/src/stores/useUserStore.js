@@ -1,5 +1,5 @@
 import { create } from "zustand";
- import axios from "../lib/axios";
+import axios from "../lib/axios";
 import { toast } from "react-hot-toast";
 
 export const useUserStore = create((set, get) => ({
@@ -25,7 +25,7 @@ export const useUserStore = create((set, get) => ({
 	},
 	login: async (email, password) => {
 		set({ loading: true });
- 
+
 		try {
 			const res = await axios.post("/auth/login", { email, password });
 
@@ -51,7 +51,7 @@ export const useUserStore = create((set, get) => ({
 			const response = await axios.get("/auth/profile");
 			set({ user: response.data, checkingAuth: false });
 		} catch (error) {
-			// console.log(error.message);
+			console.log(error.message);
 			set({ checkingAuth: false, user: null });
 		}
 	},
