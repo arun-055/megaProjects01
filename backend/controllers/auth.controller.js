@@ -1,7 +1,7 @@
 import User from "../models/user.model.js";
 import jwt from "jsonwebtoken";
 import { redis } from "../lib/redis.js";
-import { Redis } from "ioredis";
+
 
 const generateTokens = (userId) => {
   const accessToken = jwt.sign({ userId }, process.env.ACCESS_TOKEN_SECRET, {
@@ -23,13 +23,13 @@ const storeRefreshToken = async (userId, refreshToken) => {
 const setCookies = (res, accessToken, refreshToken) => {
   res.cookie("accessToken", accessToken, {
     httpOnly: true, // prevent XSS attacks, cross site scripting attack
-    secure: process.env.NODE_env === "production",
+    secure: process.env.NODE_ENV === "production",
     sameSite: "strict", //prevents CSRF attack, cross site scripting attack
     maxAge: 15 * 60 * 1000, //15 minutes
   });
   res.cookie("refreshToken", refreshToken, {
     httpOnly: true, // prevent XSS attacks, cross site scripting attack
-    secure: process.env.NODE_env === "production",
+    secure: process.env.NODE_ENV === "production",
     sameSite: "strict", //prevents CSRF attack, cross site scripting attack
     maxAge: 7 * 24 * 60 * 60 * 1000, //15 minutes
   });
